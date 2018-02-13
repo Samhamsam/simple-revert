@@ -155,6 +155,7 @@ def print_changesets_for_user(user, limit=15):
     """Prints last 15 changesets for a user."""
     try:
         root = api_download('changesets?closed=true&display_name={0}'.format(quote(user)), throw=[404])
+        list_items = ""
         for changeset in root[:limit]:
             created_by = '???'
             comment = '<no comment>'
@@ -163,8 +164,11 @@ def print_changesets_for_user(user, limit=15):
                     created_by = tag.get('v').encode('utf-8')
                 elif tag.get('k') == 'comment':
                     comment = tag.get('v').encode('utf-8')
-            print('Changeset {0} created on {1} with {2}:\t{3}'.format(
-                changeset.get('id'), changeset.get('created_at'), created_by, comment))
+            list_items += changeset.get('id') + " "
+        print(list_items)
+#            print(changeset.get('id'))
+#            print('Changeset {0} created on {1} with {2}:\t{3}'.format(
+#                changeset.get('id'), changeset.get('created_at'), created_by, comment))
     except HTTPError:
         print('No such user found.')
 
